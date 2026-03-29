@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Calculator, Flame, Activity, ArrowLeft, Droplets, Brain, Scale, User, ShieldAlert } from 'lucide-react';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 import DoseCalc from './tools/DoseCalc';
 import BurnCalc from './tools/BurnCalc';
 import BioNorms from './tools/BioNorms';
@@ -15,7 +16,7 @@ const UNITS: UnitCategory[] = ['Général', 'Urgences / Réa', 'Grands Brûlés'
 
 export default function Dashboard() {
   const [activeTool, setActiveTool] = useState<string | null>(null);
-  const [selectedUnit, setSelectedUnit] = useState<UnitCategory>('Général');
+  const [selectedUnit, setSelectedUnit] = useLocalStorage<UnitCategory>('dosesafe_selected_unit', 'Général');
 
   if (activeTool === 'dose') return <ToolWrapper onBack={() => setActiveTool(null)}><DoseCalc /></ToolWrapper>;
   if (activeTool === 'burn') return <ToolWrapper onBack={() => setActiveTool(null)}><BurnCalc /></ToolWrapper>;
