@@ -23,11 +23,22 @@ export default function Settings() {
     if (!feedback.trim()) return;
     setIsSubmittingFeedback(true);
     
+    const endpoint = import.meta.env.VITE_FORMSPREE_ENDPOINT;
+    
+    if (!endpoint) {
+      toast.error('Erreur de configuration', {
+        description: 'L\'URL de destination n\'est pas configurée.'
+      });
+      setIsSubmittingFeedback(false);
+      return;
+    }
+
     try {
-      const response = await fetch(import.meta.env.VITE_FORMSPREE_ENDPOINT, {
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
         body: JSON.stringify({ message: feedback }),
       });
