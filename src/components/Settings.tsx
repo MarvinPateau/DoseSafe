@@ -80,6 +80,34 @@ export default function Settings() {
     }
   };
 
+  const handleTestNotification = async () => {
+    if (!('Notification' in window)) {
+      toast.error('Non supporté', { description: 'Votre navigateur ne supporte pas les notifications.' });
+      return;
+    }
+
+    if (Notification.permission === 'granted') {
+      new Notification('Test DoseSafe', { 
+        body: 'Les notifications fonctionnent correctement !',
+        icon: '/vite.svg'
+      });
+      toast.success('Notification envoyée');
+    } else if (Notification.permission !== 'denied') {
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        new Notification('Test DoseSafe', { 
+          body: 'Les notifications sont maintenant activées !',
+          icon: '/vite.svg'
+        });
+        toast.success('Notifications activées');
+      } else {
+        toast.error('Permission refusée', { description: 'Vous devez autoriser les notifications dans les réglages de votre téléphone.' });
+      }
+    } else {
+      toast.error('Permission refusée', { description: 'Les notifications sont bloquées. Modifiez les réglages de votre navigateur/téléphone.' });
+    }
+  };
+
   return (
     <div className="space-y-6 pb-10">
       <div className="flex items-center space-x-3 mb-6">
@@ -138,7 +166,7 @@ export default function Settings() {
         </div>
       </div>
 
-
+      {/* Notifications */}
       <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-slate-200 dark:border-white/5 overflow-hidden transition-colors duration-300">
         <div className="p-5 border-b border-slate-200 dark:border-white/5 flex items-center space-x-3">
           <div className="p-2 bg-amber-500/10 rounded-xl text-amber-500 dark:text-amber-400">
@@ -148,7 +176,7 @@ export default function Settings() {
         </div>
         <div className="p-5">
           <label className="block text-sm font-medium text-slate-500 dark:text-zinc-400 mb-4">M'avertir avant la fin :</label>
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-4 gap-3 mb-6">
             {[5, 10, 15, 30].map(time => (
               <button
                 key={time}
@@ -163,6 +191,17 @@ export default function Settings() {
               </button>
             ))}
           </div>
+          
+          <button
+            onClick={handleTestNotification}
+            className="w-full py-3 bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 text-slate-700 dark:text-white rounded-2xl font-bold transition-all active:scale-95 flex items-center justify-center space-x-2"
+          >
+            <Bell size={18} />
+            <span>Tester les notifications</span>
+          </button>
+          <p className="text-xs text-slate-500 dark:text-zinc-500 mt-3 text-center">
+            Note : L'application doit rester ouverte pour que les alarmes sonnent.
+          </p>
         </div>
       </div>
 

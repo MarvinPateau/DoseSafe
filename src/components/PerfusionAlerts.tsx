@@ -16,11 +16,6 @@ export default function PerfusionAlerts() {
   const alertedPerfusions = useRef<Map<string, 'warning' | 'finished'>>(new Map());
 
   useEffect(() => {
-    // Demander la permission pour les notifications push du navigateur
-    if ('Notification' in window && Notification.permission === 'default') {
-      Notification.requestPermission();
-    }
-
     const checkPerfusions = () => {
       try {
         const data = window.localStorage.getItem('dosesafe_perfusions');

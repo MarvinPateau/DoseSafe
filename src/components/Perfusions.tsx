@@ -32,9 +32,18 @@ export default function Perfusions() {
     return () => clearInterval(timer);
   }, []);
 
-  const handleAdd = (e: React.FormEvent) => {
+  const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!room || !treatment || !volume || !rate) return;
+
+    // Demander la permission pour les notifications au moment du clic
+    if ('Notification' in window && Notification.permission === 'default') {
+      try {
+        await Notification.requestPermission();
+      } catch (error) {
+        console.error("Erreur lors de la demande de permission:", error);
+      }
+    }
 
     const v = parseFloat(volume);
     const r = parseFloat(rate);
