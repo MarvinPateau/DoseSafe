@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AlertTriangle, Trash2, Info, Check, X, Bell, Moon, Sun, Mail, Loader2, Send, MessageSquare } from 'lucide-react';
+import { AlertTriangle, Trash2, Info, Check, X, Bell, Moon, Sun, Mail, Loader2, Send, MessageSquare, Share2 } from 'lucide-react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { toast } from 'sonner';
 
@@ -17,6 +17,26 @@ export default function Settings() {
     window.localStorage.removeItem('dosesafe_planning');
     window.localStorage.removeItem('dosesafe_alert_timing');
     window.location.reload();
+  };
+
+  const handleShare = async () => {
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: 'DoseSafe',
+          text: 'Découvrez DoseSafe, l\'application indispensable pour les calculs de perfusion et outils cliniques en milieu hospitalier.',
+          url: window.location.origin,
+        });
+      } else {
+        // Fallback: Copy to clipboard
+        await navigator.clipboard.writeText(window.location.origin);
+        toast.success('Lien copié !', {
+          description: 'Le lien de l\'application a été copié dans votre presse-papier.'
+        });
+      }
+    } catch (error) {
+      console.error('Erreur lors du partage:', error);
+    }
   };
 
   const handleFeedbackSubmit = async () => {
@@ -66,6 +86,22 @@ export default function Settings() {
         <h2 className="text-3xl font-display font-bold text-slate-900 dark:text-white tracking-tight">Réglages</h2>
       </div>
 
+      {/* Share App */}
+      <button
+        onClick={handleShare}
+        className="w-full bg-blue-500 hover:bg-blue-600 text-white rounded-3xl p-5 flex items-center justify-between transition-all active:scale-[0.98] shadow-[0_0_20px_rgba(59,130,246,0.3)]"
+      >
+        <div className="flex items-center space-x-4">
+          <div className="p-2 bg-white/20 rounded-xl">
+            <Share2 size={24} />
+          </div>
+          <div className="text-left">
+            <h3 className="font-bold text-lg">Partager DoseSafe</h3>
+            <p className="text-blue-100 text-sm">Recommander à un collègue</p>
+          </div>
+        </div>
+      </button>
+
       {/* Theme Toggle */}
       <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-slate-200 dark:border-white/5 overflow-hidden transition-colors duration-300">
         <div className="p-5 border-b border-slate-200 dark:border-white/5 flex items-center space-x-3">
@@ -101,6 +137,7 @@ export default function Settings() {
           </div>
         </div>
       </div>
+
 
       <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-slate-200 dark:border-white/5 overflow-hidden transition-colors duration-300">
         <div className="p-5 border-b border-slate-200 dark:border-white/5 flex items-center space-x-3">
