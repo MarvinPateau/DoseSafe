@@ -21,6 +21,13 @@ export default function App() {
   const [theme, setTheme] = useLocalStorage<'dark' | 'light'>('dosesafe_theme', 'dark');
 
   useEffect(() => {
+    // Demander la permission pour les notifications au chargement de l'app
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+  }, []);
+
+  useEffect(() => {
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
     } else {
