@@ -6,6 +6,7 @@
 import React, { useState, useEffect } from 'react';
 import { Home, Droplets, Settings as SettingsIcon, StickyNote, Calendar } from 'lucide-react';
 import { Toaster } from 'sonner';
+import { Analytics } from '@vercel/analytics/react';
 import { haptics } from './utils/haptics';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import Dashboard from './components/Dashboard';
@@ -45,6 +46,7 @@ export default function App() {
   return (
     <div className="flex flex-col h-screen bg-slate-50 dark:bg-black text-slate-900 dark:text-zinc-50 font-sans overflow-hidden transition-colors duration-300">
       <Toaster theme={theme} position="top-center" />
+      <Analytics />
       <PerfusionAlerts />
       {/* Header */}
       <header className="pt-safe pb-2 px-6 bg-slate-50 dark:bg-black flex-shrink-0 z-10 pt-12 flex items-center justify-between transition-colors duration-300">
