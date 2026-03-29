@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#0EA5E9" />
+    <link rel="manifest" href="/manifest.json" />
+    <title>DoseSafe</title>
+    <style>
+      body {
+        -webkit-tap-highlight-color: transparent;
+      }
+    </style>
+    <script>
+      try {
+        if (localStorage.getItem('dosesafe_theme') === '"light"') {
+          document.documentElement.classList.remove('dark');
+        } else {
+          document.documentElement.classList.add('dark');
+        }
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // En mode développement, les Service Workers (PWA) entrent souvent en conflit 
+      // avec le serveur local (Vite), ce qui cause des rechargements infinis.
+      // On le désenregistre ici pour stabiliser l'environnement de développement.
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+          for(let registration of registrations) {
+            registration.unregister();
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
+
